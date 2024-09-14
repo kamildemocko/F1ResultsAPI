@@ -1,7 +1,6 @@
 package main
 
 import (
-	"F1ResultsApi/data"
 	"encoding/json"
 	"net/http"
 )
@@ -19,7 +18,7 @@ func (app *Config) HandleGetTracks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	d := data.Tracks{"Name", 2024}
+	d, _ := app.Repository.GetTracks(2024)
 	dm, _ := json.Marshal(d)
 
 	_, err := w.Write(dm)

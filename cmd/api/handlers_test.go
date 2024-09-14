@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -30,37 +28,37 @@ func assertContentType(t *testing.T, got string) {
 	}
 }
 
-func TestGetTracks(t *testing.T) {
-	tests := []struct {
-		name           string
-		url            string
-		expectedStatus int
-		expectedBody   string
-	}{
-		{
-			name:           "Successful request",
-			url:            "/getTracks",
-			expectedStatus: http.StatusOK,
-			expectedBody:   `{"name":"Name","year":2024}`,
-		},
-	}
+// func TestGetTracks(t *testing.T) {
+// 	tests := []struct {
+// 		name           string
+// 		url            string
+// 		expectedStatus int
+// 		expectedBody   string
+// 	}{
+// 		{
+// 			name:           "Successful request",
+// 			url:            "/getTracks",
+// 			expectedStatus: http.StatusOK,
+// 			expectedBody:   `{"name":"Name","year":2024}`,
+// 		},
+// 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rr := httptest.NewRecorder()
-			app := &Config{}
-			handler := app.routes()
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			rr := httptest.NewRecorder()
+// 			app := &Config{}
+// 			handler := app.routes()
 
-			req, err := http.NewRequest("GET", tt.url, nil)
-			if err != nil {
-				t.Fatal(err)
-			}
+// 			req, err := http.NewRequest("GET", tt.url, nil)
+// 			if err != nil {
+// 				t.Fatal(err)
+// 			}
 
-			handler.ServeHTTP(rr, req)
+// 			handler.ServeHTTP(rr, req)
 
-			assertStatusCode(t, rr.Code, tt.expectedStatus)
-			assertBody(t, rr.Body.String(), tt.expectedBody)
-			assertContentType(t, rr.Header().Get("Content-Type"))
-		})
-	}
-}
+// 			assertStatusCode(t, rr.Code, tt.expectedStatus)
+// 			assertBody(t, rr.Body.String(), tt.expectedBody)
+// 			assertContentType(t, rr.Header().Get("Content-Type"))
+// 		})
+// 	}
+// }

@@ -1,17 +1,37 @@
 package main
 
 import (
+	"F1ResultsApi/data"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/joho/godotenv"
 )
 
 const webPort = 80
 
-type Config struct{}
+type Config struct {
+	Repository data.Repository
+}
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+}
 
 func main() {
 	app := Config{}
+
+	// create db
+	db, err := initPostgresDB()
+	if err != nil {
+		panic(err)
+	}
+
+	app.Repository = data.NewRepository(db)
 
 	log.Println("starting F1 Results API")
 
