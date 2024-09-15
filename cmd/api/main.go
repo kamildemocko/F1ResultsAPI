@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 )
 
 const webPort = 80
+
+var dsn string
 
 type Config struct {
 	Repository data.Repository
@@ -18,15 +21,19 @@ type Config struct {
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		panic(err)
+		fmt.Println(".env not found, using default envirnmental variables")
 	}
+
+	dsn = os.Getenv("DSN")
+	cwd, err := os.Getwd()
+	fmt.Println(cwd)
 }
 
 func main() {
 	app := Config{}
 
 	// create db
-	db, err := initPostgresDB()
+	db, err := initPostgresDB(dsn)
 	if err != nil {
 		panic(err)
 	}

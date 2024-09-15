@@ -1,8 +1,11 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type APIHandler interface {
@@ -15,16 +18,26 @@ type APIHandler interface {
 var _ APIHandler = (*Config)(nil)
 
 func (app *Config) HandleGetTracks(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	d, _ := app.Repository.GetTracks(2024)
-	dm, _ := json.Marshal(d)
-
-	_, err := w.Write(dm)
+	yearPram := chi.URLParam(r, "year")
+	year, err := strconv.Atoi(yearPram)
 	if err != nil {
-		panic(err)
+		app.ErrorJSON(w, fmt.Errorf("invalid parameter YEAR"), http.StatusBadRequest)
+		return
 	}
+
+	data, err := app.Repository.GetTracks(year)
+	if err != nil {
+		app.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if len(data) == 0 {
+		app.WriteJSON(w, http.StatusNotFound, "error", "not found", nil)
+		return
+	}
+
+	app.WriteJSON(w, http.StatusOK, "success", "", data)
+
 }
 
 func (app *Config) HandleGetTrack(w http.ResponseWriter, r *http.Request) {}

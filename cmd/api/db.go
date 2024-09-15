@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
-	"os"
 	"time"
 
 	_ "github.com/jackc/pgx/v5"
@@ -16,8 +16,10 @@ const (
 	maxDBLifetime = 5 * time.Minute
 )
 
-func initPostgresDB() (*sql.DB, error) {
-	dsn := os.Getenv("DSN")
+func initPostgresDB(dsn string) (*sql.DB, error) {
+	if dsn == "" {
+		return nil, fmt.Errorf("empty DSN")
+	}
 
 	log.Println("connecting to DB")
 
@@ -26,7 +28,7 @@ func initPostgresDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	if err := db.Ping(); err != nil {
+	if err = db.Ping(); err != nil {
 		return nil, err
 	}
 
