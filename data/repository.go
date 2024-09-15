@@ -6,7 +6,7 @@ type Repository interface {
 	GetTracks(int) (Tracks, error)
 	GetTrack(int, string) (Track, error)
 	GetResults(int) (Results, error)
-	// GetResult(int, int64) (Results, error)
+	GetResult(int, int64) (Results, error)
 }
 
 type postgresRepository struct {

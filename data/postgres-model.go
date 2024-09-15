@@ -76,3 +76,31 @@ func (pg *postgresRepository) GetResults(year int) (Results, error) {
 
 	return results, nil
 }
+
+func (pg *postgresRepository) GetResult(year int, trackId int64) (Results, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT "position", driver_no, driver, car, laps, time_or_retired, points, name as track_name, track_id
+	FROM f1scrap.tracks
+	JOIN f1scrap.results ON tracks.id = results.track_id
+	WHERE year = $1 AND track_id = $2;`
+
+	rows, err := pg.DB.QueryContext(ctx, query, year, trackId)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []Result
+
+	for rows.Next() {
+		var rs Result
+		rows.Scan(
+			&rs.Position, &rs.DriverNo, &rs.Driver, &rs.Car, &rs.Laps,
+			&rs.TimeOrRetired, &rs.Points, &rs.TrackName, &rs.TrackId,
+		)
+		results = append(results, rs)
+	}
+
+	return results, nil
+}

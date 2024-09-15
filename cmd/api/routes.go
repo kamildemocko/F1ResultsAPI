@@ -25,9 +25,9 @@ func (app *Config) routes() http.Handler {
 	mux.Use(middleware.Timeout(60 * time.Second))
 
 	mux.Get("/getTracks/{year}", app.HandleGetTracks)
-	mux.Get("/getTrack", app.HandleGetTrack)
-	mux.Get("/getResults", app.HandleGetResults)
-	mux.Get("/getResult", app.HandleGetResult)
+	mux.Get("/getTrack/{year}/{trackName}", app.HandleGetTrack)
+	mux.Get("/getResults/{year}", app.HandleGetResults)
+	mux.Get("/getResult/{year}/{trackId}", app.HandleGetResult)
 
 	return mux
 }
