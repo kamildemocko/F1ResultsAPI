@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (pg *postgresRepository) GetTracks(year int) (Tracks, error) {
+func (pg *postgresRepository) GetTracks(year int) (*[]Track, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -27,29 +27,29 @@ func (pg *postgresRepository) GetTracks(year int) (Tracks, error) {
 		tracks = append(tracks, track)
 	}
 
-	return tracks, nil
+	return &tracks, nil
 }
 
-func (pg *postgresRepository) GetTrack(year int, trackName string) (Track, error) {
+func (pg *postgresRepository) GetTrack(year int, trackName string) (*Track, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	query := `SELECT id, name, link, year
 	FROM f1scrap.tracks
-	WHERE year = $1 AND name;`
+	WHERE year = $1 AND name = $2;`
 
-	rows := pg.DB.QueryRowContext(ctx, query, year)
+	rows := pg.DB.QueryRowContext(ctx, query, year, trackName)
 
 	var track Track
 	err := rows.Scan(&track.ID, &track.Name, &track.Link, &track.Year)
 	if err != nil {
-		return Track{}, err
+		return nil, err
 	}
 
-	return track, nil
+	return &track, nil
 }
 
-func (pg *postgresRepository) GetResults(year int) (Results, error) {
+func (pg *postgresRepository) GetResults(year int) (*[]Result, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -74,10 +74,10 @@ func (pg *postgresRepository) GetResults(year int) (Results, error) {
 		results = append(results, rs)
 	}
 
-	return results, nil
+	return &results, nil
 }
 
-func (pg *postgresRepository) GetResult(year int, trackId int64) (Results, error) {
+func (pg *postgresRepository) GetResult(year int, trackId int64) (*[]Result, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -102,5 +102,5 @@ func (pg *postgresRepository) GetResult(year int, trackId int64) (Results, error
 		results = append(results, rs)
 	}
 
-	return results, nil
+	return &results, nil
 }

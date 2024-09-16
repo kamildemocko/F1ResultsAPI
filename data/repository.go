@@ -3,10 +3,10 @@ package data
 import "database/sql"
 
 type Repository interface {
-	GetTracks(int) (Tracks, error)
-	GetTrack(int, string) (Track, error)
-	GetResults(int) (Results, error)
-	GetResult(int, int64) (Results, error)
+	GetTracks(int) (*[]Track, error)
+	GetTrack(int, string) (*Track, error)
+	GetResults(int) (*[]Result, error)
+	GetResult(int, int64) (*[]Result, error)
 }
 
 type postgresRepository struct {

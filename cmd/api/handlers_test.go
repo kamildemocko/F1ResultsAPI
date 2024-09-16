@@ -43,6 +43,36 @@ func assertContains(t *testing.T, got, want_substring string) {
 	}
 }
 
+func TestDBProblems(t *testing.T) {
+	tests := []struct {
+		name                   string
+		url                    string
+		dsn                    string
+		expected_err_substring string
+	}{
+		{
+			name:                   "Bad DSN host",
+			url:                    "/getTracks/2024",
+			dsn:                    `host=192.168.0.244 port=5432 user=postgres password=badpassword sslmode=disable timezone=UTC connect_timeout=5 search_path=f1scrap`,
+			expected_err_substring: "failed to connect",
+		},
+		{
+			name:                   "Bad DSN password",
+			url:                    "/getTracks/2024",
+			dsn:                    `host=192.168.0.10 port=5432 user=postgres password=badpassword sslmode=disable timezone=UTC connect_timeout=5 search_path=f1scrap`,
+			expected_err_substring: "password authentication failed",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := initPostgresDB(tt.dsn)
+
+			assertContains(t, err.Error(), tt.expected_err_substring)
+		})
+	}
+}
+
 func TestGetTracks(t *testing.T) {
 	godotenv.Load(".test.env")
 	dsn := os.Getenv("DSN")
@@ -100,32 +130,59 @@ func TestGetTracks(t *testing.T) {
 	}
 }
 
-func TestDBProblems(t *testing.T) {
+func TestGetTrack(t *testing.T) {
+	godotenv.Load(".test.env")
+	dsn := os.Getenv("DSN")
+
+	db, err := initPostgresDB(dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	repo := data.NewRepository(db)
+
 	tests := []struct {
-		name                   string
-		url                    string
-		dsn                    string
-		expected_err_substring string
+		name           string
+		url            string
+		expectedStatus int
+		expectedBody   string
 	}{
 		{
-			name:                   "Bad DSN host",
-			url:                    "/getTracks/2024",
-			dsn:                    `host=192.168.0.244 port=5432 user=postgres password=badpassword sslmode=disable timezone=UTC connect_timeout=5 search_path=f1scrap`,
-			expected_err_substring: "failed to connect",
+			name:           "Successful request",
+			url:            "/getTrack/2024/FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2024",
+			expectedStatus: http.StatusOK,
+			expectedBody:   `{"code":200,"message":"success","detail":"","data":{"id":1,"name":"FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2024","link":"https://www.formula1.com/en/results/2024/races/1229/bahrain/race-result","year":2024}}`,
 		},
 		{
-			name:                   "Bad DSN password",
-			url:                    "/getTracks/2024",
-			dsn:                    `host=192.168.0.10 port=5432 user=postgres password=badpassword sslmode=disable timezone=UTC connect_timeout=5 search_path=f1scrap`,
-			expected_err_substring: "password authentication failed",
+			name:           "Empty response or track not found",
+			url:            "/getTrack/2020/invalid",
+			expectedStatus: http.StatusNotFound,
+			expectedBody:   `{"code":404,"message":"error","detail":"not found"}`,
+		},
+		{
+			name:           "Bad param request YEAR",
+			url:            "/getTrack/alpha/FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2024",
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   `{"code":400,"message":"error","detail":"invalid parameter YEAR"}`,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := initPostgresDB(tt.dsn)
+			app := &Config{repo}
+			handler := app.routes()
 
-			assertContains(t, err.Error(), tt.expected_err_substring)
+			rr := httptest.NewRecorder()
+			req, err := http.NewRequest("GET", tt.url, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			handler.ServeHTTP(rr, req)
+
+			assertStatusCode(t, rr.Code, tt.expectedStatus)
+			assertBody(t, rr.Body.String(), tt.expectedBody)
+			assertContentType(t, rr.Header().Get("Content-Type"))
 		})
 	}
 }

@@ -20,3 +20,6 @@ stop:
 	@echo killing proces
 	@taskkill /IM ${GO_BINARY} /F
 	@echo - done
+
+restart: stop run
+
