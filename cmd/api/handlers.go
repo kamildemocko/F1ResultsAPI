@@ -68,6 +68,59 @@ func (app *Config) HandleGetTrack(w http.ResponseWriter, r *http.Request) {
 	app.WriteJSON(w, http.StatusOK, "success", "", data)
 }
 
-func (app *Config) HandleGetResults(w http.ResponseWriter, r *http.Request) {}
+func (app *Config) HandleGetResults(w http.ResponseWriter, r *http.Request) {
+	yearParam := chi.URLParam(r, "year")
+	year, err := strconv.Atoi(yearParam)
+	if err != nil {
+		app.ErrorJSON(w, fmt.Errorf("invalid parameter YEAR"), http.StatusBadRequest)
+		return
+	}
 
-func (app *Config) HandleGetResult(w http.ResponseWriter, r *http.Request) {}
+	data, err := app.Repository.GetResults(year)
+	if err != nil {
+		app.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if len(*data) == 0 {
+		app.WriteJSON(w, http.StatusNotFound, "error", "not found", nil)
+		return
+	}
+
+	app.WriteJSON(w, http.StatusOK, "success", "", data)
+}
+
+func (app *Config) HandleGetResult(w http.ResponseWriter, r *http.Request) {
+	yearParam := chi.URLParam(r, "year")
+	year, err := strconv.Atoi(yearParam)
+	if err != nil {
+		app.ErrorJSON(w, fmt.Errorf("invalid parameter YEAR"), http.StatusBadRequest)
+		return
+	}
+
+	trackIdParam := chi.URLParam(r, "trackId")
+	trackId, err := strconv.Atoi(trackIdParam)
+	if err != nil {
+		app.ErrorJSON(w, fmt.Errorf("invalid parameter TRACK_ID"), http.StatusBadRequest)
+		return
+	}
+
+	data, err := app.Repository.GetResult(year, int64(trackId))
+	if err != nil {
+		switch err.Error() {
+		case "sql: no rows in result set":
+			app.WriteJSON(w, http.StatusNotFound, "error", "not found", nil)
+		default:
+			app.ErrorJSON(w, err, http.StatusBadRequest)
+		}
+
+		return
+	}
+
+	if len(*data) == 0 {
+		app.WriteJSON(w, http.StatusNotFound, "error", "not found", nil)
+		return
+	}
+
+	app.WriteJSON(w, http.StatusOK, "success", "", data)
+}
