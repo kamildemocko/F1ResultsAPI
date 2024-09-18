@@ -20,7 +20,7 @@ The API provides the following endpoints:
 - `GET /getTracks/{year}/{trackName}`: Get information about a specific track in a given year
 - `GET /getResults/{year}`: Retrieve all race results for a specific year
 - `GET /getResult/{year}/{trackId}`: Get race results for a specific track in a given year
-- `GET /swagger/`: Open documentation made with Swagger
+- `GET /swagger/`: Swagger documentation
 
 For detailed information about request parameters, responses, and possible error codes, please refer to the Swagger documentation.
 
@@ -29,7 +29,7 @@ For detailed information about request parameters, responses, and possible error
 - PostgreSQL database
 - Make (for using Makefile)
 
-## Installation
+## Installation and Running
 
 ### Local
 
