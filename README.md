@@ -81,7 +81,7 @@ For detailed information about request parameters, responses, and possible error
    ```
 
 
-The API will be available at `http://localhost:80`.
+The API will be available at `http://localhost/f1/api`.
 
 ## Documentation
 

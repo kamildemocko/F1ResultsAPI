@@ -27,12 +27,14 @@ func (app *Config) routes() http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(middleware.Timeout(60 * time.Second))
 
-	mux.Get("/getTracks/{year}", app.HandleGetTracks)
-	mux.Get("/getTrack/{year}/{trackName}", app.HandleGetTrack)
-	mux.Get("/getResults/{year}", app.HandleGetResults)
-	mux.Get("/getResult/{year}/{trackId}", app.HandleGetResult)
+	mux.Route("/f1/api", func(mux chi.Router) {
+		mux.Get("/getTracks/{year}", app.HandleGetTracks)
+		mux.Get("/getTrack/{year}/{trackName}", app.HandleGetTrack)
+		mux.Get("/getResults/{year}", app.HandleGetResults)
+		mux.Get("/getResult/{year}/{trackId}", app.HandleGetResult)
 
-	mux.Get("/swagger/*", httpSwagger.WrapHandler)
+		mux.Get("/swagger/*", httpSwagger.WrapHandler)
+	})
 
 	return mux
 }
