@@ -23,3 +23,9 @@ stop:
 
 restart: stop run
 
+swag:
+	@echo creating swagger
+	@swag init -g .\cmd\api\main.go
+	@echo - done
+
+swagr: swag restart

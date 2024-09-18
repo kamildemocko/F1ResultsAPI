@@ -7,6 +7,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "F1ResultsApi/docs"
 )
 
 func (app *Config) routes() http.Handler {
@@ -28,6 +31,8 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/getTrack/{year}/{trackName}", app.HandleGetTrack)
 	mux.Get("/getResults/{year}", app.HandleGetResults)
 	mux.Get("/getResult/{year}/{trackId}", app.HandleGetResult)
+
+	mux.Get("/docs/*", httpSwagger.WrapHandler)
 
 	return mux
 }

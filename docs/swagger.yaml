@@ -1,0 +1,199 @@
+definitions:
+  data.Result:
+    properties:
+      car:
+        type: string
+      driver:
+        type: string
+      driver_no:
+        type: integer
+      laps:
+        type: integer
+      points:
+        type: integer
+      position:
+        type: integer
+      time_or_retired:
+        type: string
+      track_id:
+        type: integer
+      track_name:
+        type: string
+    type: object
+  data.Track:
+    properties:
+      id:
+        type: integer
+      link:
+        type: string
+      name:
+        type: string
+      year:
+        type: integer
+    type: object
+  main.jsonResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      detail:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /getResult/{year}/{trackId}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves specific results for the specified year and track ID
+      parameters:
+      - description: Year
+        in: path
+        name: year
+        required: true
+        type: integer
+      - description: Track ID
+        in: path
+        name: trackId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/main.jsonResponse'
+            - properties:
+                Data:
+                  items:
+                    $ref: '#/definitions/data.Result'
+                  type: array
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+      summary: Get results for a specific year and track ID
+      tags:
+      - results
+  /getResults/{year}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves specific results for the specified year
+      parameters:
+      - description: Year
+        in: path
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/main.jsonResponse'
+            - properties:
+                Data:
+                  items:
+                    $ref: '#/definitions/data.Result'
+                  type: array
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+      summary: Get results for a specific year
+      tags:
+      - results
+  /getTracks/{year}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all tracks for the specified year
+      parameters:
+      - description: Year
+        in: path
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/main.jsonResponse'
+            - properties:
+                Data:
+                  items:
+                    $ref: '#/definitions/data.Track'
+                  type: array
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+      summary: Get tracks for a specific year
+      tags:
+      - tracks
+  /getTracks/{year}/{trackName}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves specific track for the specified year and track name
+      parameters:
+      - description: Year
+        in: path
+        name: year
+        required: true
+        type: integer
+      - description: Track Name
+        in: path
+        name: trackName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/main.jsonResponse'
+            - properties:
+                Data:
+                  $ref: '#/definitions/data.Track'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/main.jsonResponse'
+      summary: Get track for a specific year and track name
+      tags:
+      - tracks
+swagger: "2.0"
