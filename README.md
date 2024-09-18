@@ -16,11 +16,11 @@ This API is built with Go, utilizing the Chi router for efficient routing and in
 
 The API provides the following endpoints:
 
-- `GET /getTracks/{year}`: Retrieve all tracks for a specific year
-- `GET /getTracks/{year}/{trackName}`: Get information about a specific track in a given year
-- `GET /getResults/{year}`: Retrieve all race results for a specific year
-- `GET /getResult/{year}/{trackId}`: Get race results for a specific track in a given year
-- `GET /swagger/`: Swagger documentation
+- `GET f1/api/getTracks/{year}`: Retrieve all tracks for a specific year
+- `GET f1/api/getTracks/{year}/{trackName}`: Get information about a specific track in a given year
+- `GET f1/api/getResults/{year}`: Retrieve all race results for a specific year
+- `GET f1/api/getResult/{year}/{trackId}`: Get race results for a specific track in a given year
+- `GET f1/api/swagger/`: Swagger documentation
 
 For detailed information about request parameters, responses, and possible error codes, please refer to the Swagger documentation.
 
@@ -72,11 +72,3 @@ For detailed information about request parameters, responses, and possible error
 
 
 The API will be available at `http://localhost/f1/api`.
-
-## Documentation
-
-This API is documented using Swagger. To generate or update the Swagger documentation, run:
-
-```
-make swag
-```
