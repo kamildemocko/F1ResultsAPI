@@ -2,7 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"strings"
+	"time"
 )
 
 type jsonResponse struct {
@@ -50,4 +53,17 @@ func (app *Config) ErrorJSON(w http.ResponseWriter, err error, status ...int) er
 	}
 
 	return app.WriteJSON(w, statusCode, "error", err.Error(), nil)
+}
+
+func logMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.RequestURI, "/f1/api/swagger/") {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		start := time.Now()
+		next.ServeHTTP(w, r)
+		log.Printf("completed %s in %v", r.RequestURI, time.Since(start))
+	})
 }
