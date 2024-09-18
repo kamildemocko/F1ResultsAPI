@@ -55,29 +55,19 @@ For detailed information about request parameters, responses, and possible error
 
 5. Build the application:
    ```
-   make build
-   ```
-
-6. Run the application:
-   ```
-   make run
+   go run .\cmd\api
    ```
 
 ### Docker
 
 1. Build the Docker image:
    ```
-   make dbuild
+   docker build -t f1-results-api .
    ```
 
 2. Run the Docker container:
    ```
-   make dstart
-   ```
-
-3. Stop the Docker container:
-   ```
-   make dstop
+   docker run -p 8080:80 -d --name f1-results-api-run f1-results-api
    ```
 
 
