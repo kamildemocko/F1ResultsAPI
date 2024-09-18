@@ -23,7 +23,7 @@ stop:
 	@taskkill /IM ${GO_BINARY} /F
 	@echo - done
 
-restart: stop run
+restart: stop start
 
 swag:
 	@echo creating swagger
