@@ -20,6 +20,7 @@ The API provides the following endpoints:
 - `GET /getTracks/{year}/{trackName}`: Get information about a specific track in a given year
 - `GET /getResults/{year}`: Retrieve all race results for a specific year
 - `GET /getResult/{year}/{trackId}`: Get race results for a specific track in a given year
+- `GET /swagger/`: Open documentation made with Swagger
 
 For detailed information about request parameters, responses, and possible error codes, please refer to the Swagger documentation.
 
@@ -61,6 +62,24 @@ For detailed information about request parameters, responses, and possible error
    ```
    make run
    ```
+
+### Docker
+
+1. Build the Docker image:
+   ```
+   make dbuild
+   ```
+
+2. Run the Docker container:
+   ```
+   make dstart
+   ```
+
+3. Stop the Docker container:
+   ```
+   make dstop
+   ```
+
 
 The API will be available at `http://localhost:80`.
 

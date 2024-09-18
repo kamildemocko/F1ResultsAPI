@@ -32,7 +32,7 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/getResults/{year}", app.HandleGetResults)
 	mux.Get("/getResult/{year}/{trackId}", app.HandleGetResult)
 
-	mux.Get("/docs/*", httpSwagger.WrapHandler)
+	mux.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	return mux
 }
