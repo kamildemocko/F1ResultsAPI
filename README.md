@@ -67,7 +67,7 @@ For detailed information about request parameters, responses, and possible error
 
 2. Run the Docker container:
    ```
-   docker run -p 8080:80 -d --name f1-results-api-run f1-results-api
+   docker run -p 8080:80 -d --name f1-results-api-run --network postgres f1-results-api
    ```
 
 
