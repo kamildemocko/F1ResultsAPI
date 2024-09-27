@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/getResult/{year}/{trackId}": {
+        "/f1/api/getResult/{year}/{trackId}": {
             "get": {
                 "description": "Retrieves specific results for the specified year and track ID",
                 "consumes": [
@@ -81,7 +81,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/getResults/{year}": {
+        "/f1/api/getResults/{year}": {
             "get": {
                 "description": "Retrieves specific results for the specified year",
                 "consumes": [
@@ -140,7 +140,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/getTracks/{year}": {
+        "/f1/api/getTracks/{year}": {
             "get": {
                 "description": "Retrieves all tracks for the specified year",
                 "consumes": [
@@ -199,7 +199,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/getTracks/{year}/{trackName}": {
+        "/f1/api/getTracks/{year}/{trackName}": {
             "get": {
                 "description": "Retrieves specific track for the specified year and track name",
                 "consumes": [

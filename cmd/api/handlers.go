@@ -28,7 +28,7 @@ var _ APIHandler = (*Config)(nil)
 // @Success 200 {object} jsonResponse{Data=[]data.Track} "Successful operation"
 // @Failure 400 {object} jsonResponse "Bad request"
 // @Failure 404 {object} jsonResponse "Not found"
-// @Router /getTracks/{year} [get]
+// @Router /f1/api/getTracks/{year} [get]
 func (app *Config) HandleGetTracks(w http.ResponseWriter, r *http.Request) {
 	yearParam := chi.URLParam(r, "year")
 	year, err := strconv.Atoi(yearParam)
@@ -61,7 +61,7 @@ func (app *Config) HandleGetTracks(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} jsonResponse{Data=data.Track} "Successful operation"
 // @Failure 400 {object} jsonResponse "Bad request"
 // @Failure 404 {object} jsonResponse "Not found"
-// @Router /getTracks/{year}/{trackName} [get]
+// @Router /f1/api/getTracks/{year}/{trackName} [get]
 func (app *Config) HandleGetTrack(w http.ResponseWriter, r *http.Request) {
 	trackName := chi.URLParam(r, "trackName")
 	yearParam := chi.URLParam(r, "year")
@@ -100,7 +100,7 @@ func (app *Config) HandleGetTrack(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} jsonResponse{Data=[]data.Result} "Successful operation"
 // @Failure 400 {object} jsonResponse "Bad request"
 // @Failure 404 {object} jsonResponse "Not found"
-// @Router /getResults/{year} [get]
+// @Router /f1/api/getResults/{year} [get]
 func (app *Config) HandleGetResults(w http.ResponseWriter, r *http.Request) {
 	yearParam := chi.URLParam(r, "year")
 	year, err := strconv.Atoi(yearParam)
@@ -133,7 +133,7 @@ func (app *Config) HandleGetResults(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} jsonResponse{Data=[]data.Result} "Successful operation"
 // @Failure 400 {object} jsonResponse "Bad request"
 // @Failure 404 {object} jsonResponse "Not found"
-// @Router /getResult/{year}/{trackId} [get]
+// @Router /f1/api/getResult/{year}/{trackId} [get]
 func (app *Config) HandleGetResult(w http.ResponseWriter, r *http.Request) {
 	yearParam := chi.URLParam(r, "year")
 	year, err := strconv.Atoi(yearParam)

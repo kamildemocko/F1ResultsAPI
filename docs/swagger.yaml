@@ -44,7 +44,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /getResult/{year}/{trackId}:
+  /f1/api/getResult/{year}/{trackId}:
     get:
       consumes:
       - application/json
@@ -85,7 +85,7 @@ paths:
       summary: Get results for a specific year and track ID
       tags:
       - results
-  /getResults/{year}:
+  /f1/api/getResults/{year}:
     get:
       consumes:
       - application/json
@@ -121,7 +121,7 @@ paths:
       summary: Get results for a specific year
       tags:
       - results
-  /getTracks/{year}:
+  /f1/api/getTracks/{year}:
     get:
       consumes:
       - application/json
@@ -157,7 +157,7 @@ paths:
       summary: Get tracks for a specific year
       tags:
       - tracks
-  /getTracks/{year}/{trackName}:
+  /f1/api/getTracks/{year}/{trackName}:
     get:
       consumes:
       - application/json
